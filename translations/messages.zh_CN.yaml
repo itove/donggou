@@ -27,6 +27,7 @@ Image: 标题图片
 Images: 更多图片
 Conf: 设置
 Created At: 创建于
+CreatedAt: 创建于
 Updated At: 更新于
 Site Name: 网站名称
 Keywords: 网站关键词
@@ -112,4 +113,6 @@ Quantity: 数量
 Amount: 金额
 Status: 状态
 Paid At: 支付于
+PaidAt: 支付于
 Used At: 核销于
+UsedAt: 核销于

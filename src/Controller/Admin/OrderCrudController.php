@@ -25,11 +25,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 class OrderCrudController extends AbstractCrudController
 {
     const STATUSES = [
-        'Pending' => 0,
-        'Paid' => 1,
-        'Used' => 2,
-        'Cancelled' => 4,
-        'Deleted' => 5,
+        '待支付' => 0,
+        '已支付' => 1,
+        '已核销' => 2,
+        '已取消' => 4,
+        '已删除' => 5,
     ];
 
     public static function getEntityFqcn(): string
@@ -44,13 +44,6 @@ class OrderCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        $statuses = [
-            'Pending' => 0,
-            'Paid' => 1,
-            'Used' => 2,
-            'Cancelled' => 4,
-            'Deleted' => 5,
-        ];
         yield IdField::new('id')->onlyOnIndex();
         yield AssociationField::new('consumer')->setDisabled();
         yield AssociationField::new('node')->setDisabled();
