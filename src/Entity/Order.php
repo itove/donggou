@@ -29,6 +29,15 @@ class Order
     #[ORM\Column]
     private ?int $amount = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $paidAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $usedAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,6 +87,42 @@ class Order
     public function setAmount(int $amount): static
     {
         $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getPaidAt(): ?\DateTimeImmutable
+    {
+        return $this->paidAt;
+    }
+
+    public function setPaidAt(?\DateTimeImmutable $paidAt): static
+    {
+        $this->paidAt = $paidAt;
+
+        return $this;
+    }
+
+    public function getUsedAt(): ?\DateTimeImmutable
+    {
+        return $this->usedAt;
+    }
+
+    public function setUsedAt(?\DateTimeImmutable $usedAt): static
+    {
+        $this->usedAt = $usedAt;
 
         return $this;
     }
