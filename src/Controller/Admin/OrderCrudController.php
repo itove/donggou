@@ -48,7 +48,8 @@ class OrderCrudController extends AbstractCrudController
         yield MoneyField::new('amount')->setCurrency('CNY');
         yield ChoiceField::new('status')
             ->setChoices($statuses)
-            ->setDisabled();
+            ->setDisabled()
+        ;
         yield DateTimeField::new('createdAt')->onlyOnIndex();
         yield DateTimeField::new('paidAt')->onlyOnIndex();
         yield DateTimeField::new('usedAt')->onlyOnIndex();
