@@ -10,6 +10,7 @@ use App\Service\Data;
 use App\Entity\Feedback;
 use App\Entity\User;
 use App\Entity\Node;
+use App\Entity\Order;
 
 #[Route('/api')]
 class ApiController extends AbstractController
@@ -305,5 +306,82 @@ class ApiController extends AbstractController
         $node = $this->data->formatNode($nodes[0]);
         
         return $this->json($node);
+    }
+
+    #[Route('/orders/{oid}', methods: ['GET'], requirements: ['oid' => '\d+'])]
+    public function getOrder(int $oid): Response
+    {
+        $em = $this->data->getEntityManager();
+
+        $order = $em->getRepository(Order::class)->find($oid);
+
+        $data = [
+            'id' => $order->getId(),
+            'node' => $order->getNode()->getId(),
+            'consumer' => $order->getConsumer()->getId(),
+            'quantity' => $order->getQuantity(),
+            'amount' => $order->getAmount(),
+            'createdAt' => $order->getCreatedAt(),
+            'paidAt' => $order->getPaidAt(),
+            'usedAt' => $order->getUsedAt(),
+            'status' => $order->getStatus(),
+        ];
+
+        return $this->json($data);
+    }
+
+    #[Route('/orders', methods: ['GET'])]
+    public function listOrders(Request $request): Response
+    {
+        $uid = $request->query->get('uid');
+
+        $em = $this->data->getEntityManager();
+        $user = $em->getRepository(User::class)->find($uid);
+        $orders = $em->getRepository(Order::class)->findBy(['consumer' => $uid]);
+        
+        $data = [];
+        
+        foreach ($orders as $order) {
+            array_push($data, [
+                'id' => $order->getId(),
+                'node' => $order->getNode()->getId(),
+                'consumer' => $order->getConsumer()->getId(),
+                'quantity' => $order->getQuantity(),
+                'amount' => $order->getAmount(),
+                'createdAt' => $order->getCreatedAt(),
+                'paidAt' => $order->getPaidAt(),
+                'usedAt' => $order->getUsedAt(),
+                'status' => $order->getStatus(),
+            ]);
+        }
+
+
+        return $this->json($data);
+    }
+
+    #[Route('/orders', methods: ['POST'])]
+    public function createOrder(Request $request): Response
+    {
+        $data = $request->toArray();
+        $nid = $data['nid'];
+        $uid = $data['uid'];
+        $quantity = $data['quantity'];
+        $amount = $data['amount'];
+
+        $em = $this->data->getEntityManager();
+
+        $user = $em->getRepository(User::class)->find($uid);
+        $node = $this->data->getNode($nid);
+
+        $order = new Order();
+        $order->setNode($node);
+        $order->setConsumer($user);
+        $order->setQuantity($quantity);
+        $order->setAmount($amount);
+        $em->persist($order);
+        
+        $em->flush();
+
+        return $this->json(['msg' => 0]);
     }
 }
