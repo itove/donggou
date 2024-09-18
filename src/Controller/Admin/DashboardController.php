@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use App\Entity\Order;
 use App\Entity\Node;
 use App\Entity\Region;
 use App\Entity\Page;
@@ -126,6 +127,7 @@ class DashboardController extends AbstractDashboardController
         ;
 
         yield MenuItem::section('');
+        yield MenuItem::linkToCrud('Order Management', 'fas fa-link', Order::class);
         yield MenuItem::linkToCrud('Menu Management', 'fas fa-link', Menu::class);
         yield MenuItem::linkToCrud('Tag Management', 'fas fa-tags', Tag::class);
         yield MenuItem::linkToCrud('Category Management', 'fas fa-table-cells-large', Category::class);
