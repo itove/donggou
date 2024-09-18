@@ -42,7 +42,7 @@ class Order
      * 0: new, 1: paid, 2: used, 4: cancelled, 5: deleted
      */
     #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $status = null;
+    private ?int $status = 0;
 
     public function __construct()
     {

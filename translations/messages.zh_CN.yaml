@@ -102,3 +102,8 @@ Latitude: 纬度
 Longitude: 经度
 Order: 订单
 Order Management: 订单管理
+Pending: 待付款
+Paid: 已付款
+Used: 已核销
+Cancelled: 已取消
+Deleted: 已删除

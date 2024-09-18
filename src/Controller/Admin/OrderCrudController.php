@@ -34,11 +34,21 @@ class OrderCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $statuses = [
+            'Pending' => 0,
+            'Paid' => 1,
+            'Used' => 2,
+            'Cancelled' => 4,
+            'Deleted' => 5,
+        ];
         yield IdField::new('id')->onlyOnIndex();
-        yield AssociationField::new('consumer');
-        yield AssociationField::new('node');
+        yield AssociationField::new('consumer')->setDisabled();
+        yield AssociationField::new('node')->setDisabled();
         yield IntegerField::new('quantity');
         yield MoneyField::new('amount')->setCurrency('CNY');
+        yield ChoiceField::new('status')
+            ->setChoices($statuses)
+            ->setDisabled();
         yield DateTimeField::new('createdAt')->onlyOnIndex();
         yield DateTimeField::new('paidAt')->onlyOnIndex();
         yield DateTimeField::new('usedAt')->onlyOnIndex();
