@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
@@ -202,6 +203,7 @@ class NodeCrudController extends AbstractCrudController
         // ;
 
         $imageField = VichImageField::new('imageFile', 'Image')->hideOnIndex();
+        $priceField = MoneyField::new('price')->setCurrency('CNY')->hideOnIndex();
         $videoField = VichFileField::new('videoFile', 'Video')->hideOnIndex();
         $audioField = VichFileField::new('audioFile', 'Audio')->hideOnIndex();
         $qrField = VichImageField::new('qrFile', 'Qr')->hideOnIndex();
