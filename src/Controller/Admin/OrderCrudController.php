@@ -19,9 +19,19 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 
 class OrderCrudController extends AbstractCrudController
 {
+    const STATUSES = [
+        'Pending' => 0,
+        'Paid' => 1,
+        'Used' => 2,
+        'Cancelled' => 4,
+        'Deleted' => 5,
+    ];
+
     public static function getEntityFqcn(): string
     {
         return Order::class;
@@ -47,11 +57,24 @@ class OrderCrudController extends AbstractCrudController
         yield IntegerField::new('quantity');
         yield MoneyField::new('amount')->setCurrency('CNY');
         yield ChoiceField::new('status')
-            ->setChoices($statuses)
+            ->setChoices(self::STATUSES)
             ->setDisabled()
         ;
         yield DateTimeField::new('createdAt')->onlyOnIndex();
         yield DateTimeField::new('paidAt')->onlyOnIndex();
         yield DateTimeField::new('usedAt')->onlyOnIndex();
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('consumer')
+            ->add('node')
+            ->add('amount')
+            ->add(ChoiceFilter::new('status')->setChoices(self::STATUSES))
+            ->add('createdAt')
+            ->add('paidAt')
+            ->add('usedAt')
+        ;
     }
 }
