@@ -38,6 +38,12 @@ class Order
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $usedAt = null;
 
+    /**
+     * 0: new, 1: paid, 2: used, 4: cancelled, 5: deleted
+     */
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $status = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -128,6 +134,18 @@ class Order
     public function setUsedAt(?\DateTimeImmutable $usedAt): static
     {
         $this->usedAt = $usedAt;
+
+        return $this;
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
