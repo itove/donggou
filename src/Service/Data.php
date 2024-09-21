@@ -101,6 +101,7 @@ class Data
             'longitude' => $n->getLongitude(),
             'address' => $n->getAddress() ? $n->getAddress() : $conf->getAddress(),
             'phone' => $n->getPhone() ? $n->getPhone() : $conf->getPhone(),
+            'price' => $n->getPrice(),
         ];
 
         if (!empty($n->getRegions())) {
