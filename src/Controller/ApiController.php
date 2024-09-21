@@ -366,12 +366,12 @@ class ApiController extends AbstractController
         $nid = $data['nid'];
         $uid = $data['uid'];
         $quantity = $data['quantity'];
-        $amount = $data['amount'];
 
         $em = $this->data->getEntityManager();
 
         $user = $em->getRepository(User::class)->find($uid);
         $node = $this->data->getNode($nid);
+        $amount = $node->getPrice() * $quantity;
 
         $order = new Order();
         $order->setNode($node);
