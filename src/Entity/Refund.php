@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RefundRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RefundRepository::class)]
@@ -19,6 +20,12 @@ class Refund
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $reason = 0;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $note = null;
 
     public function __construct()
     {
@@ -50,6 +57,30 @@ class Refund
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getReason(): ?int
+    {
+        return $this->reason;
+    }
+
+    public function setReason(int $reason): static
+    {
+        $this->reason = $reason;
+
+        return $this;
+    }
+
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): static
+    {
+        $this->note = $note;
 
         return $this;
     }
