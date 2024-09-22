@@ -53,10 +53,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'consumer', targetEntity: Order::class)]
     private Collection $orders;
 
+    #[ORM\OneToMany(mappedBy: 'checker', targetEntity: Check::class, orphanRemoval: true)]
+    private Collection $checks;
+
     public function __construct()
     {
         $this->fav = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->checks = new ArrayCollection();
     }
     
     public function __toString(): string
@@ -242,6 +246,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($order->getConsumer() === $this) {
                 $order->setConsumer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Check>
+     */
+    public function getChecks(): Collection
+    {
+        return $this->checks;
+    }
+
+    public function addCheck(Check $check): static
+    {
+        if (!$this->checks->contains($check)) {
+            $this->checks->add($check);
+            $check->setChecker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCheck(Check $check): static
+    {
+        if ($this->checks->removeElement($check)) {
+            // set the owning side to null (unless already changed)
+            if ($check->getChecker() === $this) {
+                $check->setChecker(null);
             }
         }
 
