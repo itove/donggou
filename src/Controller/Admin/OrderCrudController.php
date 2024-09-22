@@ -47,6 +47,7 @@ class OrderCrudController extends AbstractCrudController
         yield IdField::new('id')->onlyOnIndex();
         yield AssociationField::new('consumer')->setDisabled();
         yield AssociationField::new('node')->setDisabled();
+        yield MoneyField::new('price')->setCurrency('CNY');
         yield IntegerField::new('quantity');
         yield MoneyField::new('amount')->setCurrency('CNY');
         yield ChoiceField::new('status')
