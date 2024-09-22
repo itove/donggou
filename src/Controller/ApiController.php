@@ -352,9 +352,9 @@ class ApiController extends AbstractController
                 'paidAt' => $order->getPaidAt(),
                 'usedAt' => $order->getUsedAt(),
                 'status' => $order->getStatus(),
+                'node' => $this->data->formatNode($order->getNode()),
             ]);
         }
-
 
         return $this->json($data);
     }
@@ -377,6 +377,7 @@ class ApiController extends AbstractController
         $order->setNode($node);
         $order->setConsumer($user);
         $order->setQuantity($quantity);
+        $order->setPrice($node->getPrice());
         $order->setAmount($amount);
         $em->persist($order);
         

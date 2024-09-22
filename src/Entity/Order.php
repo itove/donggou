@@ -44,6 +44,9 @@ class Order
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = 1;
 
+    #[ORM\Column]
+    private ?int $price = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -146,6 +149,18 @@ class Order
     public function setStatus(int $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): static
+    {
+        $this->price = $price;
 
         return $this;
     }
