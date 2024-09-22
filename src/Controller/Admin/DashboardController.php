@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use App\Entity\Order;
 use App\Entity\Check;
+use App\Entity\Refund;
 use App\Entity\Node;
 use App\Entity\Region;
 use App\Entity\Page;
@@ -130,7 +131,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('');
         yield MenuItem::linkToCrud('Order Management', 'fas fa-book-open', Order::class);
         yield MenuItem::linkToCrud('Check Records', 'fas fa-book-open', Check::class);
-        yield MenuItem::linkToCrud('Refund Records', 'fas fa-book-open', Check::class);
+        yield MenuItem::linkToCrud('Refund Records', 'fas fa-book-open', Refund::class);
         yield MenuItem::linkToCrud('Menu Management', 'fas fa-link', Menu::class);
         yield MenuItem::linkToCrud('Tag Management', 'fas fa-tags', Tag::class);
         yield MenuItem::linkToCrud('Category Management', 'fas fa-table-cells-large', Category::class);
