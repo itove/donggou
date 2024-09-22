@@ -58,6 +58,7 @@ class ApiController extends AbstractController
             'name' => $user->getName(),
             'phone' => $user->getPhone(),
             'avatar' => $user->getAvatar(),
+            'roles' => $user->getRoles(),
         ];
         return $this->json($data);
     }
