@@ -443,7 +443,7 @@ class ApiController extends AbstractController
 
         $check = new Check();
         $check->setOrd($order);
-        $check->setCheck($checker);
+        $check->setChecker($checker);
         $em->persist($check);
         
         $em->flush();
