@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Entity\Node;
 use App\Entity\Order;
 use App\Entity\Check;
+use App\Entity\Refund;
 
 #[Route('/api')]
 class ApiController extends AbstractController
@@ -419,6 +420,29 @@ class ApiController extends AbstractController
         $order = $em->getRepository(Order::class)->find($oid);
 
         $order->setStatus(4);
+        
+        $em->flush();
+
+        return $this->json(['code' => 0]);
+    }
+
+    #[Route('/orders/refund', requirements: ['oid' => '\d+'], methods: ['POST'])]
+    public function refund(Request $request): Response
+    {
+        $data = $request->toArray();
+        $oid = $data['oid'];
+        $reason = $data['reason'];
+
+        $em = $this->data->getEntityManager();
+
+        $order = $em->getRepository(Order::class)->find($oid);
+
+        $order->setStatus(5);
+
+        $refund = new Refund();
+        $refund->setOrd($order);
+        $refund->setReason($reason);
+        $em->persist($refund);
         
         $em->flush();
 
