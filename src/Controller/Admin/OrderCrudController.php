@@ -25,9 +25,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 class OrderCrudController extends AbstractCrudController
 {
     const STATUSES = [
-        '待支付' => 0,
-        '已支付' => 1,
-        '已核销' => 2,
+        '待支付' => 1,
+        '已支付' => 2,
+        '已核销' => 3,
         '已取消' => 4,
         '已删除' => 5,
     ];
