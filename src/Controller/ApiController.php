@@ -11,6 +11,7 @@ use App\Entity\Feedback;
 use App\Entity\User;
 use App\Entity\Node;
 use App\Entity\Order;
+use App\Entity\Check;
 
 #[Route('/api')]
 class ApiController extends AbstractController
@@ -390,20 +391,63 @@ class ApiController extends AbstractController
         return $this->json(['code' => 0]);
     }
 
-    #[Route('/orders/{oid}', requirements: ['oid' => '\d+'], methods: ['PATCH'])]
-    public function updateOrder(int $oid, Request $request): Response
+    // #[Route('/orders/{oid}', requirements: ['oid' => '\d+'], methods: ['PATCH'])]
+    // public function updateOrder(int $oid, Request $request): Response
+    // {
+    //     $data = $request->toArray();
+    //     $status = $data['status'];
+
+    //     $em = $this->data->getEntityManager();
+
+    //     $order = $em->getRepository(Order::class)->find($oid);
+
+    //     $order->setStatus($status);
+    //     
+    //     $em->flush();
+
+    //     return $this->json(['code' => 0]);
+    // }
+
+    #[Route('/orders/cancel', requirements: ['oid' => '\d+'], methods: ['POST'])]
+    public function cancelOrder(Request $request): Response
     {
         $data = $request->toArray();
-        $status = $data['status'];
+        $oid = $data['oid'];
 
         $em = $this->data->getEntityManager();
 
         $order = $em->getRepository(Order::class)->find($oid);
 
-        $order->setStatus($status);
+        $order->setStatus(4);
         
         $em->flush();
 
+        return $this->json(['code' => 0]);
+    }
+
+    #[Route('/orders/check', requirements: ['oid' => '\d+'], methods: ['POST'])]
+    public function checkOrder(Request $request): Response
+    {
+        $data = $request->toArray();
+        $oid = $data['oid'];
+        $uid = $data['uid'];
+
+        $em = $this->data->getEntityManager();
+
+        $order = $em->getRepository(Order::class)->find($oid);
+        $checker = $em->getRepository(User::class)->find($uid);
+
+        $order->setStatus(3);
+
+        $em = $this->data->getEntityManager();
+
+        $check = new Check();
+        $check->setOrd($order);
+        $check->setCheck($checker);
+        $em->persist($check);
+        
+        $em->flush();
+        
         return $this->json(['code' => 0]);
     }
 }
