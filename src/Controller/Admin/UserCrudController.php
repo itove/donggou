@@ -64,6 +64,7 @@ class UserCrudController extends AbstractCrudController
                 ->setChoices([
                     'user' => 'ROLE_USER',
                     'admin' => 'ROLE_ADMIN',
+                    'cashier' => 'ROLE_CASHIER',
                     'Super Admin' => 'ROLE_SUPER_ADMIN',
                 ])
                 ;
