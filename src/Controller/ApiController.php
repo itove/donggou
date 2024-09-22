@@ -328,6 +328,8 @@ class ApiController extends AbstractController
             'createdAt' => $order->getCreatedAt(),
             'paidAt' => $order->getPaidAt(),
             'usedAt' => $order->getUsedAt(),
+            'cancelledAt' => $order->getCancelledAt(),
+            'refundedAt' => $order->getRefundedAt(),
             'status' => $order->getStatus(),
             'node' => $this->data->formatNode($order->getNode()),
         ];
@@ -357,6 +359,8 @@ class ApiController extends AbstractController
                 'createdAt' => $order->getCreatedAt(),
                 'paidAt' => $order->getPaidAt(),
                 'usedAt' => $order->getUsedAt(),
+                'cancelledAt' => $order->getCancelledAt(),
+                'refundedAt' => $order->getRefundedAt(),
                 'status' => $order->getStatus(),
                 'node' => $this->data->formatNode($order->getNode()),
             ]);
