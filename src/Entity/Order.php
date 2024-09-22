@@ -39,7 +39,7 @@ class Order
     private ?\DateTimeImmutable $usedAt = null;
 
     /**
-     * 1: new, 2: paid, 3: used, 4: cancelled, 5: deleted
+     * 1: new, 2: paid, 3: used, 4: cancelled, 5: refunded, 6: deleted
      */
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = 1;

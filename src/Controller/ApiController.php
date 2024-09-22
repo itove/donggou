@@ -386,6 +386,23 @@ class ApiController extends AbstractController
         
         $em->flush();
 
-        return $this->json(['msg' => 0]);
+        return $this->json(['code' => 0]);
+    }
+
+    #[Route('/orders/{oid}', requirements: ['oid' => '\d+'], methods: ['PATCH'])]
+    public function updateOrder(int $oid, Request $request): Response
+    {
+        $data = $request->toArray();
+        $status = $data['status'];
+
+        $em = $this->data->getEntityManager();
+
+        $order = $em->getRepository(Order::class)->find($oid);
+
+        $order->setStatus($status);
+        
+        $em->flush();
+
+        return $this->json(['code' => 0]);
     }
 }
