@@ -320,11 +320,13 @@ class ApiController extends AbstractController
             'node' => $order->getNode()->getId(),
             'consumer' => $order->getConsumer()->getId(),
             'quantity' => $order->getQuantity(),
+            'price' => $order->getPrice(),
             'amount' => $order->getAmount(),
             'createdAt' => $order->getCreatedAt(),
             'paidAt' => $order->getPaidAt(),
             'usedAt' => $order->getUsedAt(),
             'status' => $order->getStatus(),
+            'node' => $this->data->formatNode($order->getNode()),
         ];
 
         return $this->json($data);
