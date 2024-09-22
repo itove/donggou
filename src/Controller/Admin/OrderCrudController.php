@@ -40,7 +40,10 @@ class OrderCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions;
+        return $actions
+            ->add('index', 'detail')
+            ->disable('delete')
+        ;
     }
 
     public function configureFields(string $pageName): iterable
@@ -55,9 +58,12 @@ class OrderCrudController extends AbstractCrudController
             ->setChoices(self::STATUSES)
             // ->setDisabled()
         ;
-        yield DateTimeField::new('createdAt')->onlyOnIndex();
-        yield DateTimeField::new('paidAt')->onlyOnIndex();
-        yield DateTimeField::new('usedAt')->onlyOnIndex();
+        yield DateTimeField::new('createdAt')->hideOnForm();
+        yield DateTimeField::new('paidAt')->hideOnForm();
+        yield DateTimeField::new('usedAt')->hideOnForm();
+        yield DateTimeField::new('cancelledAt')->hideOnForm();
+        yield DateTimeField::new('refundedAt')->hideOnForm();
+        yield DateTimeField::new('deletedAt')->hideOnForm();
     }
 
     public function configureFilters(Filters $filters): Filters

@@ -103,10 +103,13 @@ Qr: 二维码
 Latitude: 纬度
 Longitude: 经度
 Order: 订单
+Ord: 订单
 Order Management: 订单管理
 Pending: 待付款
 Paid: 已付款
 Used: 已核销
+Check: 核销
+Checker: 核销人
 Cancelled: 已取消
 Deleted: 已删除
 Consumer: 顾客
@@ -117,4 +120,7 @@ Paid At: 支付于
 PaidAt: 支付于
 Used At: 核销于
 UsedAt: 核销于
+Cancelled At: 取消于
+Refunded At: 退款于
+Deleted At: 删除于
 Check Records: 核销记录
