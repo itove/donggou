@@ -47,6 +47,15 @@ class Order
     #[ORM\Column]
     private ?int $price = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $cancelledAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $refundedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deletedAt = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -161,6 +170,42 @@ class Order
     public function setPrice(int $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCancelledAt(): ?\DateTimeImmutable
+    {
+        return $this->cancelledAt;
+    }
+
+    public function setCancelledAt(?\DateTimeImmutable $cancelledAt): static
+    {
+        $this->cancelledAt = $cancelledAt;
+
+        return $this;
+    }
+
+    public function getRefundedAt(): ?\DateTimeImmutable
+    {
+        return $this->refundedAt;
+    }
+
+    public function setRefundedAt(?\DateTimeImmutable $refundedAt): static
+    {
+        $this->refundedAt = $refundedAt;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deletedAt): static
+    {
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }
