@@ -492,6 +492,9 @@ class ApiController extends AbstractController
         return $this->json(['code' => 0]);
     }
 
+    /**
+     * @test curl -k -d '{"nid": 100,"uid":7, "quantity": 1}' https://127.0.0.1:8000/api/wx/pay/prepay
+     */
     #[Route('/wx/pay/prepay', methods: ['POST'])]
     public function getWxPrepay(Request $request): Response
     {
@@ -516,9 +519,8 @@ class ApiController extends AbstractController
         
         $em->flush();
         
-        $notify_url = 'https://127.0.0.1:8000/api/wx/pay/notify';
-        $oid = 'wx' . str_pad($order->getId(), 18, 0, STR_PAD_LEFT);
-        $resp = $this->wxpay->prepay($oid, $order->getNode()->getTitle(), $order->getAmount(), $order->getConsumer()->getOpenid(), $notify_url);
+        $notify_url = 'https://' . $request->server->get('HTTP_HOST') . '/api/wx/pay/notify';
+        $resp = $this->wxpay->prepay($order->getSn(), $order->getNode()->getTitle(), $order->getAmount(), $order->getConsumer()->getOpenid(), $notify_url);
 
         return $resp['prepay_id'];
     }
