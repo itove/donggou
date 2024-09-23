@@ -15,18 +15,27 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
+use App\Service\WxPay;
 
-// #[AsEntityListener(event: Events::prePersist, entity: Node::class)]
-// #[AsEntityListener(event: Events::postPersist, entity: Node::class)]
+// #[AsEntityListener(event: Events::prePersist, entity: Order::class)]
+// #[AsEntityListener(event: Events::postPersist, entity: Order::class)]
 #[AsEntityListener(event: Events::preUpdate, entity: Order::class)]
 class OrderListener extends AbstractController
 {
-    // public function prePersist(Node $node, LifecycleEventArgs $event): void
+    private $wxpay;
+
+    public function __construct(WxPay $wxpay)
+    {
+        $this->wxpay = $wxpay;
+    }
+
+    // public function prePersist(Order $order, LifecycleEventArgs $event): void
     // {
-    //     $em = $event->getEntityManager();
-    //     foreach ($node->getRegions() as $region) {
-    //     }
     // }
+
+    public function postPersist(Order $order, LifecycleEventArgs $event): void
+    {
+    }
     
     public function preUpdate(Order $order, PreUpdateEventArgs $event): void
     {

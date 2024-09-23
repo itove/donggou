@@ -13,15 +13,18 @@ use App\Entity\Node;
 use App\Entity\Order;
 use App\Entity\Check;
 use App\Entity\Refund;
+use App\Service\WxPay;
 
 #[Route('/api')]
 class ApiController extends AbstractController
 {
     private $data;
+    private $wxpay;
 
-    public function __construct(Data $data)
+    public function __construct(Data $data, WxPay $wxpay)
     {
         $this->data = $data;
+        $this->wxpay = $wxpay;
     }
 
     #[Route('/media_objects', methods: ['POST'])]
@@ -413,7 +416,7 @@ class ApiController extends AbstractController
     //     return $this->json(['code' => 0]);
     // }
 
-    #[Route('/orders/cancel', requirements: ['oid' => '\d+'], methods: ['POST'])]
+    #[Route('/orders/cancel', methods: ['POST'])]
     public function cancelOrder(Request $request): Response
     {
         $data = $request->toArray();
@@ -430,7 +433,7 @@ class ApiController extends AbstractController
         return $this->json(['code' => 0]);
     }
 
-    #[Route('/orders/refund', requirements: ['oid' => '\d+'], methods: ['POST'])]
+    #[Route('/orders/refund', methods: ['POST'])]
     public function refund(Request $request): Response
     {
         $data = $request->toArray();
@@ -453,7 +456,7 @@ class ApiController extends AbstractController
         return $this->json(['code' => 0]);
     }
 
-    #[Route('/orders/check', requirements: ['oid' => '\d+'], methods: ['POST'])]
+    #[Route('/orders/check', methods: ['POST'])]
     public function checkOrder(Request $request): Response
     {
         $data = $request->toArray();
@@ -477,5 +480,46 @@ class ApiController extends AbstractController
         $em->flush();
         
         return $this->json(['code' => 0]);
+    }
+
+    #[Route('/wx/pay/notify')]
+    public function wxPayNotify(Request $request): Response
+    {
+        $data = $request->toArray();
+        dump($request);
+        dump($data);
+        
+        return $this->json(['code' => 0]);
+    }
+
+    #[Route('/wx/pay/prepay', methods: ['POST'])]
+    public function getWxPrepay(Request $request): Response
+    {
+        $data = $request->toArray();
+        $nid = $data['nid'];
+        $uid = $data['uid'];
+        $quantity = $data['quantity'];
+
+        $em = $this->data->getEntityManager();
+
+        $user = $em->getRepository(User::class)->find($uid);
+        $node = $this->data->getNode($nid);
+        $amount = $node->getPrice() * $quantity;
+
+        $order = new Order();
+        $order->setNode($node);
+        $order->setConsumer($user);
+        $order->setQuantity($quantity);
+        $order->setPrice($node->getPrice());
+        $order->setAmount($amount);
+        $em->persist($order);
+        
+        $em->flush();
+        
+        $notify_url = 'https://127.0.0.1:8000/api/wx/pay/notify';
+        $oid = 'wx' . str_pad($order->getId(), 18, 0, STR_PAD_LEFT);
+        $resp = $this->wxpay->prepay($oid, $order->getNode()->getTitle(), $order->getAmount(), $order->getConsumer()->getOpenid(), $notify_url);
+
+        return $resp['prepay_id'];
     }
 }
