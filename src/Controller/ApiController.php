@@ -323,6 +323,7 @@ class ApiController extends AbstractController
 
         $data = [
             'id' => $order->getId(),
+            'sn' => $order->getSn(),
             'node' => $order->getNode()->getId(),
             'consumer' => $order->getConsumer()->getId(),
             'quantity' => $order->getQuantity(),
@@ -354,6 +355,7 @@ class ApiController extends AbstractController
         foreach ($orders as $order) {
             array_push($data, [
                 'id' => $order->getId(),
+                'sn' => $order->getSn(),
                 'node' => $order->getNode()->getId(),
                 'consumer' => $order->getConsumer()->getId(),
                 'quantity' => $order->getQuantity(),
