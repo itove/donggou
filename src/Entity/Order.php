@@ -56,6 +56,9 @@ class Order
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $sn = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -206,6 +209,18 @@ class Order
     public function setDeletedAt(?\DateTimeImmutable $deletedAt): static
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function getSn(): ?string
+    {
+        return $this->sn;
+    }
+
+    public function setSn(string $sn): static
+    {
+        $this->sn = $sn;
 
         return $this;
     }
