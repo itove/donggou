@@ -62,6 +62,7 @@ class Order
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->sn = strtoupper(str_replace('.', '', uniqid('', true)));
     }
 
     public function getId(): ?int

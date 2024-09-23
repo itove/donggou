@@ -49,6 +49,7 @@ class OrderCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->onlyOnIndex();
+        yield TextField::new('sn')->setDisabled();
         yield AssociationField::new('consumer')->setDisabled();
         yield AssociationField::new('node')->setDisabled();
         yield MoneyField::new('price')->setCurrency('CNY');
