@@ -68,6 +68,9 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $wxPrepayId = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $deleted = false;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -267,6 +270,18 @@ class Order
     public function setWxPrepayId(?string $wxPrepayId): static
     {
         $this->wxPrepayId = $wxPrepayId;
+
+        return $this;
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(?bool $deleted): static
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }

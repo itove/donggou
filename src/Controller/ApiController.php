@@ -464,6 +464,24 @@ class ApiController extends AbstractController
         return $this->json(['code' => 0]);
     }
 
+    #[Route('/orders/delete', methods: ['POST'])]
+    public function deleteOrder(Request $request): Response
+    {
+        $data = $request->toArray();
+        $oid = $data['oid'];
+
+        $em = $this->data->getEntityManager();
+
+        $order = $em->getRepository(Order::class)->find($oid);
+
+        $order->setStatus(4);
+        
+        $em->flush();
+
+        return $this->json(['code' => 0]);
+    }
+
+
     #[Route('/orders/check', methods: ['POST'])]
     public function checkOrder(Request $request): Response
     {
