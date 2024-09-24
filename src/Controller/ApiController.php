@@ -524,6 +524,6 @@ class ApiController extends AbstractController
         $notify_url = 'https://' . $request->server->get('HTTP_HOST') . '/api/wx/pay/notify';
         $resp = $this->wxpay->prepay($order->getSn(), $order->getNode()->getTitle(), $order->getAmount(), $order->getConsumer()->getOpenid(), $notify_url);
 
-        return $resp['prepay_id'];
+        return $this->json($resp['prepay_id']);
     }
 }
