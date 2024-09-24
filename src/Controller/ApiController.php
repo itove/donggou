@@ -500,6 +500,8 @@ class ApiController extends AbstractController
         
         $res = $this->wxpay->decode($resource['ciphertext'], $resource['nonce'], $resource['associated_data']);
 
+        dump($res);
+
         if ($res['trade_state'] === 'SUCCESS') {
             $order = $this->data->getOrderBySn($res['out_trade_no']);
             $order->setWxTransId($res['transaction_id']);
@@ -510,6 +512,33 @@ class ApiController extends AbstractController
         }
         
         return $this->json(['code' => 'SUCCESS', 'message' => 'OK']);
+    }
+
+    #[Route('/wx/pay/{oid}', methods: ['POST'])]
+    public function payWithWx($int $oid): Response
+    {
+        $order = $this->data->getOrder($oid);
+
+        $package = 'prepay_id=' . $order->getWxPrepayId();
+        $timestamp = time();
+        $nonce = md5(uniqid());
+        $msg = $this->wx->getAppid() . "\n".
+            $timestamp . "\n" .
+            $nonce . "\n" .
+            $package . "\n";
+
+        $paySign = $this->wxpay->genSign($msg);
+        
+        $data = [
+            "timeStamp" => "$timestamp",
+            "nonceStr" => $nonce,
+            "package" => $package,
+            "signType" => 'RSA',
+            "paySign" => $paySign,
+            'oid' => $order->getId(),
+        ];
+
+        return $this->json(["code" => 0, "data" => $data]);
     }
 
     /**
@@ -536,35 +565,15 @@ class ApiController extends AbstractController
         $order->setQuantity($quantity);
         $order->setPrice($node->getPrice());
         $order->setAmount($amount);
-        $em->persist($order);
-        
-        $em->flush();
         
         $notify_url = 'https://' . $request->server->get('HTTP_HOST') . '/api/wx/pay/notify';
         $resp = $this->wxpay->prepay($order->getSn(), $order->getNode()->getTitle(), $order->getAmount(), $order->getConsumer()->getOpenid(), $notify_url);
-        
-        $package = 'prepay_id=' . $resp['prepay_id'];
-        $timestamp = time();
-        $nonce = md5(uniqid());
-        $msg = $this->wx->getAppid() . "\n".
-            $timestamp . "\n" .
-            $nonce . "\n" .
-            $package . "\n";
 
-        $paySign = $this->wxpay->genSign($msg);
-        
-        $data = [
-            "timeStamp" => "$timestamp",
-            "nonceStr" => $nonce,
-            "package" => $package,
-            "signType" => 'RSA',
-            "paySign" => $paySign,
-            'oid' => $order->getId(),
-        ];
+        $order->setWxPrepayId($resp['prepay_id']);
+        $em->persist($order);
+        $em->flush();
 
-        // dump($data);
-
-        return $this->json(["code" => 0, "data" => $data]);
+        return $this->payWithWx($order->getId());
     }
 
     #[Route('/wx/pay/cerlist', methods: ['GET'])]

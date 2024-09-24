@@ -336,6 +336,11 @@ class Data
                         ;
     }
 
+    public function getOrder(int $oid)
+    {
+        return $this->doctrine->getRepository(Order::class)->find($oid);
+    }
+
     public function getOrderBySn(string $sn)
     {
         return $this->doctrine->getRepository(Order::class)->findOneBy(['sn' => $sn]);
