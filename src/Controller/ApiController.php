@@ -445,11 +445,12 @@ class ApiController extends AbstractController
         $oid = $data['oid'];
         $reason = $data['reason'];
 
+        $em = $this->data->getEntityManager();
+        $order = $em->getRepository(Order::class)->find($oid);
         $order->setStatus(5);
         $refund = new Refund();
         $refund->setOrd($order);
         $refund->setReason($reason);
-        $em = $this->data->getEntityManager();
         $em->persist($refund);
 
         $order = $em->getRepository(Order::class)->find($oid);
