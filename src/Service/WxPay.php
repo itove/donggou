@@ -117,6 +117,14 @@ class WxPay
         return $token;
     }
 
+    public function genSign($msg)
+    {
+        openssl_sign($msg, $raw_sign, $this->getPrivateKey(), 'sha256WithRSAEncryption');
+        $sign = base64_encode($raw_sign);
+
+        return $sign;
+    }
+
     public static function getPrivateKey() {
         return openssl_get_privatekey(file_get_contents($_ENV['WXPAY_PRIVATE_KEY_PATH']));
     }

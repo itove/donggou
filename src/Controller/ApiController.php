@@ -14,17 +14,20 @@ use App\Entity\Order;
 use App\Entity\Check;
 use App\Entity\Refund;
 use App\Service\WxPay;
+use App\Service\Wx;
 
 #[Route('/api')]
 class ApiController extends AbstractController
 {
     private $data;
     private $wxpay;
+    private $wx;
 
-    public function __construct(Data $data, WxPay $wxpay)
+    public function __construct(Data $data, WxPay $wxpay, Wx $wx)
     {
         $this->data = $data;
         $this->wxpay = $wxpay;
+        $this->wx = $wx;
     }
 
     #[Route('/media_objects', methods: ['POST'])]
@@ -523,7 +526,27 @@ class ApiController extends AbstractController
         
         $notify_url = 'https://' . $request->server->get('HTTP_HOST') . '/api/wx/pay/notify';
         $resp = $this->wxpay->prepay($order->getSn(), $order->getNode()->getTitle(), $order->getAmount(), $order->getConsumer()->getOpenid(), $notify_url);
+        
+        $package = 'prepay_id=' . $resp['prepay_id'];
+        $timestamp = time();
+        $nonce = md5(uniqid());
+        $msg = $this->wx->getAppid() . "\n".
+            $timestamp . "\n" .
+            $nonce . "\n" .
+            $package . "\n";
 
-        return $this->json($resp['prepay_id']);
+        $paySign = $this->wxpay->genSign($msg);
+        
+        $data = [
+            "timestamp" => $timestamp,
+            "nonceStr" => $nonce,
+            "package" => $package,
+            "signType" => 'RSA',
+            "paySign" => $paySign,
+        ];
+
+        // dump($data);
+
+        return $this->json(["code" => 0, "data" => $data]);
     }
 }
