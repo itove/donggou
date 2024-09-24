@@ -351,7 +351,7 @@ class ApiController extends AbstractController
 
         $em = $this->data->getEntityManager();
         $user = $em->getRepository(User::class)->find($uid);
-        $orders = $em->getRepository(Order::class)->findBy(['consumer' => $uid]);
+        $orders = $em->getRepository(Order::class)->findBy(['consumer' => $uid], ['id' => 'DESC']);
         
         $data = [];
         
