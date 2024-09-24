@@ -59,6 +59,7 @@ class UserCrudController extends AbstractCrudController
                 ]);
         } else {
             yield TextField::new('username');
+            yield TextField::new('name');
             yield ChoiceField::new('roles')
                 ->onlyOnIndex()
                 ->setChoices([
