@@ -515,7 +515,7 @@ class ApiController extends AbstractController
     }
 
     #[Route('/wx/pay/{oid}', methods: ['POST'])]
-    public function payWithWx($int $oid): Response
+    public function payWithWx(int $oid): Response
     {
         $order = $this->data->getOrder($oid);
 
