@@ -498,7 +498,15 @@ class ApiController extends AbstractController
         // $this->wxpay->verifySignature();
 
         $resource = $data['resource'];
-        $ciphertext = $resource['ciphertext'];
+        
+        $res = $this->wxpay->decode($resource['ciphertext'], $resource['nonce'], $resource['associated_data']);
+
+        $res['bank_type'];
+        $res['amount']['total'];
+        
+        if ($res['trade_state'] === 'SUCCESS') {
+            $order = $this->data->getOrderBySn($res['out_trade_no']);
+        }
         
         return $this->json(['code' => 'SUCCESS', 'message' => 'OK']);
     }
@@ -561,6 +569,29 @@ class ApiController extends AbstractController
     #[Route('/wx/pay/cerlist', methods: ['GET'])]
     public function getWXCertList(Request $request): Response
     {
-        // return $this->wxpay->getWXCertList();
+        $this->wxpay->getWXCertList();
+
+        return $this->json(["code" => 0]);
+    }
+
+    #[Route('/test/decode', methods: ['GET'])]
+    public function testDecode(Request $request): Response
+    {
+        // dump(openssl_get_cipher_methods());
+        $k = $_ENV['WXPAY_APIV3_SECRET'];
+        dump($k);
+        $a = 'AEAD_AES_256_GCM';
+        $a = 'aes-256-gcm';
+        $c = '8335/RHgOHJSAuz4INX1t2hdBC3dkaGDqxm8OyXM9aNThu6AVDTq0galc1ODyEL6UXhdaqyqE3sbdmSgEUAzoFwirPYV9iIchxOBngMZFFQnHlz7T0H3w3o3Ju574wkbyC2+e5gCbA8iPSHC6YF76sT+VH8ur35YgNwZT9VgEbzsba2pqZaavJLgO5iYzDWEIjMQ0us0+/rUCjhrKt4FManN7LxXLMXq+qlbqru8v+QOuAn6oXKw/Nt0E/kpOE9ah6c2724CFX8fntVu5R38/QABCmPa3l8KgmViVPMyEGy2XXi22KUP2k3svLOr0vl/NB7xoXeVAVJiWYLJEZ24POuEblSNhiJV2s6nhRpR7EQ+EnxuIwqyWhGzUYAukWfxbUSW/DiEoNGdsI+wz+DyR6IsE2AD0nOVzlikdN/Pmr2tljsCtm/ewW6ursc6QA5MLQjZRrrOg+Z18oldU+qhW/+wzaemKF0guOvQsNiWCGYD8VUp/w35z30rCFKkGZacWD/Jr6bZL0I3NjWrzw9uAGQT7SbVqspYMxKz4+Qf9UWb8lkygHtBTG/JHabn1l8ekmyOQKfYrwk=';
+        $c1 = base64_decode($c);
+        $c2 = substr($c1, 0, -16);
+        $authTag = substr($c1, -16);
+        dump($c1);
+        dump($c2);
+        dump($authTag);
+        $n = 'JGEF5qEBRuwM';
+        $associated_data = 'transaction';
+        $t = openssl_decrypt($c2, $a, $k, OPENSSL_RAW_DATA, $n, $authTag, $associated_data);
+        dump($t);
     }
 }

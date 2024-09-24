@@ -59,6 +59,12 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $sn = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $wxTransId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bankType = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -222,6 +228,30 @@ class Order
     public function setSn(string $sn): static
     {
         $this->sn = $sn;
+
+        return $this;
+    }
+
+    public function getWxTransId(): ?string
+    {
+        return $this->wxTransId;
+    }
+
+    public function setWxTransId(?string $wxTransId): static
+    {
+        $this->wxTransId = $wxTransId;
+
+        return $this;
+    }
+
+    public function getBankType(): ?string
+    {
+        return $this->bankType;
+    }
+
+    public function setBankType(?string $bankType): static
+    {
+        $this->bankType = $bankType;
 
         return $this;
     }

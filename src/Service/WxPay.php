@@ -16,17 +16,20 @@ use App\Service\Wx;
 
 class WxPay
 {
+    const KEY_LENGTH_BYTE = 32;
+    const AUTH_TAG_LENGTH_BYTE = 16;
+    const URL = 'https://api.mch.weixin.qq.com';
     private $httpClient;
     private $wx;
     private $mchid;
-    
-    const URL = 'https://api.mch.weixin.qq.com';
+    private $apiv3Secret;
 
     public function __construct(HttpClientInterface $client, Wx $wx)
     {
         $this->httpClient = $client;
         $this->wx = $wx;
         $this->mchid = $_ENV['WXPAY_MCH_ID'];
+        $this->apiv3Secret = $_ENV['WXPAY_APIV3_SECRET'];
     }
 
     /**
@@ -179,5 +182,15 @@ class WxPay
 
     public function verifySignature()
     {
+    }
+
+    public function decode($cipher, $nonce, $aad)
+    {
+        $algo = 'aes-256-gcm';
+        $c1 = base64_decode($cipher);
+        $c2 = substr($c1, 0, -self::AUTH_TAG_LENGTH_BYTE);
+        $tag = substr($c1, -self::AUTH_TAG_LENGTH_BYTE);
+
+        return openssl_decrypt($c2, $algo, $this->apiv3Secret, OPENSSL_RAW_DATA, $nonce, $tag, $aad);
     }
 }

@@ -16,6 +16,7 @@ use App\Entity\Region;
 use App\Entity\Page;
 use App\Entity\Language;
 use App\Entity\Menu;
+use App\Entity\Order;
 
 class Data
 {
@@ -333,5 +334,10 @@ class Data
       return $this->doctrine->getRepository(Node::class)
                             ->findByCategoryAndTag(['category' => $cate_label, 'tag' => $tag_label], [], $limit)
                         ;
+    }
+
+    public function getOrderBySn(string $sn)
+    {
+        return $this->doctrine->getRepository(Order::class)->findOneBy(['sn' => $sn]);
     }
 }
