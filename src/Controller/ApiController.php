@@ -498,9 +498,9 @@ class ApiController extends AbstractController
 
         $resource = $data['resource'];
         
-        $res = $this->wxpay->decode($resource['ciphertext'], $resource['nonce'], $resource['associated_data']);
+        $json = $this->wxpay->decode($resource['ciphertext'], $resource['nonce'], $resource['associated_data']);
 
-        dump($res);
+        $res = json_decode($json, true);
 
         if ($res['trade_state'] === 'SUCCESS') {
             $order = $this->data->getOrderBySn($res['out_trade_no']);
