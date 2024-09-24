@@ -39,8 +39,9 @@ class OrderListener extends AbstractController
     
     public function preUpdate(Order $order, PreUpdateEventArgs $event): void
     {
+        $datetime = new \DateTimeImmutable;
+
         if ($event->hasChangedField('status')) {
-            $datetime = new \DateTimeImmutable;
 
             if($order->getStatus() === 2) {
                 $order->setPaidAt($datetime);
