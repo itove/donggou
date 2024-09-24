@@ -17,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
@@ -64,6 +65,7 @@ class OrderCrudController extends AbstractCrudController
         yield DateTimeField::new('usedAt')->hideOnForm();
         yield DateTimeField::new('cancelledAt')->hideOnForm();
         yield DateTimeField::new('refundedAt')->hideOnForm();
+        yield BooleanField::new('deleted')->setDisabled();
         yield DateTimeField::new('deletedAt')->hideOnForm();
     }
 
