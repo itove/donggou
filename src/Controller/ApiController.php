@@ -445,18 +445,16 @@ class ApiController extends AbstractController
         $oid = $data['oid'];
         $reason = $data['reason'];
 
-        $em = $this->data->getEntityManager();
-
-        $order = $em->getRepository(Order::class)->find($oid);
-
         $order->setStatus(5);
-
         $refund = new Refund();
         $refund->setOrd($order);
         $refund->setReason($reason);
+        $em = $this->data->getEntityManager();
         $em->persist($refund);
-        
         $em->flush();
+
+        $order = $em->getRepository(Order::class)->find($oid);
+        $this->wxpay->refund($order->getWxTransId(), $refund->getSn(), $order->getAmount(), $reason);
 
         return $this->json(['code' => 0]);
     }

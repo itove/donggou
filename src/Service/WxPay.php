@@ -193,4 +193,25 @@ class WxPay
 
         return openssl_decrypt($c2, $algo, $this->apiv3Secret, OPENSSL_RAW_DATA, $nonce, $tag, $aad);
     }
+
+    public function refund(string $transaction_id, string $out_refund_no, $amount, string $reason = '')
+    {
+        $url = self::URL . "/v3/refund/domestic/refunds";
+        $sig = $this->genSig($url, 'POST', '');
+        $headers[] = "Authorization: {$sig}";
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Accept:application/json';
+
+        $data = [
+            'transaction_id' => $$transaction_id,
+            'out_refund_no' => $out_refund_no,
+            'reason' => $reason,
+            'amount' => $amount,
+            // 'notify_url' => $notify_url,
+        ];
+
+        $json = json_encode($data);
+
+        return $this->httpClient->request('POST', $url, ['headers' => $headers, 'body' => $json])->toArray();
+    }
 }
