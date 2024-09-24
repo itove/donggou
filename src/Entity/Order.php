@@ -68,7 +68,7 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $wxPrepayId = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column]
     private ?bool $deleted = false;
 
     public function __construct()
