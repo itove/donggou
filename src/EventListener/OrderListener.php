@@ -54,9 +54,9 @@ class OrderListener extends AbstractController
             if($order->getStatus() === 5) {
                 $order->setRefundedAt($datetime);
             }
-            if($order->getStatus() === 6) {
-                $order->setDeletedAt($datetime);
-            }
+        }
+        if ($event->hasChangedField('deleted')) {
+            $order->setDeletedAt($datetime);
         }
     }
 }
