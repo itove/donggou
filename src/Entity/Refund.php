@@ -27,9 +27,13 @@ class Refund
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $note = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $sn = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->sn = strtoupper(str_replace('.', '', uniqid('', true)));
     }
 
     public function getId(): ?int
@@ -81,6 +85,18 @@ class Refund
     public function setNote(?string $note): static
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getSn(): ?string
+    {
+        return $this->sn;
+    }
+
+    public function setSn(string $sn): static
+    {
+        $this->sn = $sn;
 
         return $this;
     }
