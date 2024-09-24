@@ -351,7 +351,7 @@ class ApiController extends AbstractController
 
         $em = $this->data->getEntityManager();
         $user = $em->getRepository(User::class)->find($uid);
-        $orders = $em->getRepository(Order::class)->findBy(['consumer' => $uid], ['id' => 'DESC']);
+        $orders = $em->getRepository(Order::class)->findBy(['consumer' => $uid, 'deleted' => false], ['id' => 'DESC']);
         
         $data = [];
         
@@ -474,7 +474,7 @@ class ApiController extends AbstractController
 
         $order = $em->getRepository(Order::class)->find($oid);
 
-        $order->setStatus(4);
+        $order->setDeleted(true);
         
         $em->flush();
 
