@@ -30,7 +30,7 @@ class OrderCrudController extends AbstractCrudController
         '已核销' => 3,
         '已取消' => 4,
         '已退款' => 5,
-        '已删除' => 6,
+        // '已删除' => 6,
     ];
 
     public static function getEntityFqcn(): string
