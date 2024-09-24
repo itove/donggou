@@ -494,7 +494,7 @@ class ApiController extends AbstractController
         dump($request);
         dump($data);
         
-        return $this->json(['code' => 0]);
+        return $this->json(['code' => 'SUCCESS', 'message' => 'OK']);
     }
 
     /**
@@ -544,6 +544,7 @@ class ApiController extends AbstractController
             "package" => $package,
             "signType" => 'RSA',
             "paySign" => $paySign,
+            'oid' => $order->getId(),
         ];
 
         // dump($data);
