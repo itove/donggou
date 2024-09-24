@@ -491,7 +491,6 @@ class ApiController extends AbstractController
     public function wxPayNotify(Request $request): Response
     {
         $data = $request->toArray();
-        dump($data);
         
         $sig = $request->headers->get('wechatpay-signature');
         $sigType = $request->headers->get('wechatpay-signature-type');
@@ -501,11 +500,13 @@ class ApiController extends AbstractController
         
         $res = $this->wxpay->decode($resource['ciphertext'], $resource['nonce'], $resource['associated_data']);
 
-        $res['bank_type'];
-        $res['amount']['total'];
-        
         if ($res['trade_state'] === 'SUCCESS') {
             $order = $this->data->getOrderBySn($res['out_trade_no']);
+            $order->setWxTransId($res['transaction_id']);
+            $order->setBankType($res['bank_type']);
+            $order->setStatus(2);
+            $em = $this->data->getEntityManager();
+            $em->flush();
         }
         
         return $this->json(['code' => 'SUCCESS', 'message' => 'OK']);

@@ -65,6 +65,9 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bankType = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $wxPrepayId = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -252,6 +255,18 @@ class Order
     public function setBankType(?string $bankType): static
     {
         $this->bankType = $bankType;
+
+        return $this;
+    }
+
+    public function getWxPrepayId(): ?string
+    {
+        return $this->wxPrepayId;
+    }
+
+    public function setWxPrepayId(?string $wxPrepayId): static
+    {
+        $this->wxPrepayId = $wxPrepayId;
 
         return $this;
     }
