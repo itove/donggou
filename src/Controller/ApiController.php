@@ -451,10 +451,14 @@ class ApiController extends AbstractController
         $refund->setReason($reason);
         $em = $this->data->getEntityManager();
         $em->persist($refund);
-        $em->flush();
 
         $order = $em->getRepository(Order::class)->find($oid);
-        $this->wxpay->refund($order->getWxTransId(), $refund->getSn(), $order->getAmount(), $reason);
+        $resp = $this->wxpay->refund($order->getWxTransId(), $refund->getSn(), $order->getAmount(), $reason);
+        if ($resp['status'] === 'SUCCESS') {
+            $refund->setWxRefundId($resp['refund_id']);
+        }
+
+        $em->flush();
 
         return $this->json(['code' => 0]);
     }

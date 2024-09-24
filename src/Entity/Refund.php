@@ -30,6 +30,9 @@ class Refund
     #[ORM\Column(length: 255)]
     private ?string $sn = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $wxRefundId = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -97,6 +100,18 @@ class Refund
     public function setSn(string $sn): static
     {
         $this->sn = $sn;
+
+        return $this;
+    }
+
+    public function getWxRefundId(): ?string
+    {
+        return $this->wxRefundId;
+    }
+
+    public function setWxRefundId(?string $wxRefundId): static
+    {
+        $this->wxRefundId = $wxRefundId;
 
         return $this;
     }
