@@ -137,10 +137,10 @@ class WxPay
         $serial_no = $this->getMchCertSN();
         $sig = $this->genSig($url, $method, "");
         // $header[] = 'User-Agent:https://zh.wikipedia.org/wiki/User_agent';
-        $header[] = 'Content-Type: application/json';
-        $header[] = 'Accept:application/json';
-        $header[] = $sig;
-        $resp = $this->httpclient->request($method, $url ,['headers' => $header]);
+        $headers[] = 'Authorization: ' . $sig;
+        $headers[] = 'Accept:application/json';
+        $headers[] = 'Content-Type: application/json';
+        $resp = $this->httpClient->request($method, $url, ['headers' => $headers]);
         $content = $resp->getContent(false);
         // return $this->json($resp);
     }
@@ -175,5 +175,9 @@ class WxPay
          * @resp { "prepay_id": "wx201410272009395522657a690389285100" }
          */
         return $this->httpClient->request('POST', $url, ['headers' => $headers, 'body' => $json])->toArray();
+    }
+
+    public function verifySignature()
+    {
     }
 }

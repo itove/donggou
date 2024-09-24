@@ -491,8 +491,14 @@ class ApiController extends AbstractController
     public function wxPayNotify(Request $request): Response
     {
         $data = $request->toArray();
-        dump($request);
         dump($data);
+        
+        $sig = $request->headers->get('wechatpay-signature');
+        $sigType = $request->headers->get('wechatpay-signature-type');
+        // $this->wxpay->verifySignature();
+
+        $resource = $data['resource'];
+        $ciphertext = $resource['ciphertext'];
         
         return $this->json(['code' => 'SUCCESS', 'message' => 'OK']);
     }
@@ -550,5 +556,11 @@ class ApiController extends AbstractController
         // dump($data);
 
         return $this->json(["code" => 0, "data" => $data]);
+    }
+
+    #[Route('/wx/pay/cerlist', methods: ['GET'])]
+    public function getWXCertList(Request $request): Response
+    {
+        // return $this->wxpay->getWXCertList();
     }
 }
