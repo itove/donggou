@@ -200,7 +200,11 @@ class WxPay
             'transaction_id' => $transaction_id,
             'out_refund_no' => $out_refund_no,
             'reason' => $reason,
-            'amount' => ['refund' => $amount],
+            'amount' => [
+                'refund' => $amount,
+                'total' => $amount,
+                'currency' => "CNY",
+            ],
             // 'notify_url' => $notify_url,
         ];
 
