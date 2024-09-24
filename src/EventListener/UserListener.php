@@ -29,9 +29,11 @@ class UserListener extends AbstractController
 
     public function prePersist(User $user, LifecycleEventArgs $event): void
     {
-        if (! is_null($user->getOpenid())) {
+        if (is_null($user->getOpenid())) {
+            $user->setName($user->getUsername());
+        } else {
             $user->setUsername($user->getOpenid());
-            $user->setName('用户' . substr($user->getOpenid(), 0, 5));
+            $user->setName('用户' . substr($user->getOpenid(), -5));
         }
         if (is_null($user->getPlainPassword())) {
             $user->setPlainPassword('111');
