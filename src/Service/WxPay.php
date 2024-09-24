@@ -196,12 +196,6 @@ class WxPay
 
     public function refund(string $transaction_id, string $out_refund_no, $amount, string $reason = '')
     {
-        $url = self::URL . "/v3/refund/domestic/refunds";
-        $sig = $this->genSig($url, 'POST', '');
-        $headers[] = "Authorization: {$sig}";
-        $headers[] = 'Content-Type: application/json';
-        $headers[] = 'Accept:application/json';
-
         $data = [
             'transaction_id' => $transaction_id,
             'out_refund_no' => $out_refund_no,
@@ -211,6 +205,12 @@ class WxPay
         ];
 
         $json = json_encode($data);
+        $url = self::URL . "/v3/refund/domestic/refunds";
+        $sig = $this->genSig($url, 'POST', $json);
+        $headers[] = "Authorization: {$sig}";
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Accept:application/json';
+
 
         return $this->httpClient->request('POST', $url, ['headers' => $headers, 'body' => $json])->toArray();
     }
