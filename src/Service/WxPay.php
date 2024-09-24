@@ -200,7 +200,7 @@ class WxPay
             'transaction_id' => $transaction_id,
             'out_refund_no' => $out_refund_no,
             'reason' => $reason,
-            'amount' => $amount,
+            'amount' => ['refund' => $amount],
             // 'notify_url' => $notify_url,
         ];
 
