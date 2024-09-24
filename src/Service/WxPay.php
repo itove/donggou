@@ -203,7 +203,7 @@ class WxPay
         $headers[] = 'Accept:application/json';
 
         $data = [
-            'transaction_id' => $$transaction_id,
+            'transaction_id' => $transaction_id,
             'out_refund_no' => $out_refund_no,
             'reason' => $reason,
             'amount' => $amount,
