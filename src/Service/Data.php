@@ -82,6 +82,28 @@ class Data
         return $this->doctrine->getRepository(Node::class)->find($id);
     }
 
+    public function formatOrder(Order $order)
+    {
+        $data = [
+            'id' => $order->getId(),
+            'sn' => $order->getSn(),
+            'node' => $order->getNode()->getId(),
+            'consumer' => $order->getConsumer()->getId(),
+            'quantity' => $order->getQuantity(),
+            'price' => $order->getPrice(),
+            'amount' => $order->getAmount(),
+            'createdAt' => $order->getCreatedAt(),
+            'paidAt' => $order->getPaidAt(),
+            'usedAt' => $order->getUsedAt(),
+            'cancelledAt' => $order->getCancelledAt(),
+            'refundedAt' => $order->getRefundedAt(),
+            'status' => $order->getStatus(),
+            'node' => self::formatNode($order->getNode()),
+        ];
+
+        return $data;
+    }
+
     public function formatNode(Node $n)
     {
         $conf = $this->findConfByLocale(null);

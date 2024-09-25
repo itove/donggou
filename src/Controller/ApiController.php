@@ -324,24 +324,7 @@ class ApiController extends AbstractController
 
         $order = $em->getRepository(Order::class)->find($oid);
 
-        $data = [
-            'id' => $order->getId(),
-            'sn' => $order->getSn(),
-            'node' => $order->getNode()->getId(),
-            'consumer' => $order->getConsumer()->getId(),
-            'quantity' => $order->getQuantity(),
-            'price' => $order->getPrice(),
-            'amount' => $order->getAmount(),
-            'createdAt' => $order->getCreatedAt(),
-            'paidAt' => $order->getPaidAt(),
-            'usedAt' => $order->getUsedAt(),
-            'cancelledAt' => $order->getCancelledAt(),
-            'refundedAt' => $order->getRefundedAt(),
-            'status' => $order->getStatus(),
-            'node' => $this->data->formatNode($order->getNode()),
-        ];
-
-        return $this->json($data);
+        return $this->json($this->data->formatOrder($order));
     }
 
     #[Route('/orders', methods: ['GET'])]
@@ -356,22 +339,7 @@ class ApiController extends AbstractController
         $data = [];
         
         foreach ($orders as $order) {
-            array_push($data, [
-                'id' => $order->getId(),
-                'sn' => $order->getSn(),
-                'node' => $order->getNode()->getId(),
-                'consumer' => $order->getConsumer()->getId(),
-                'quantity' => $order->getQuantity(),
-                'price' => $order->getPrice(),
-                'amount' => $order->getAmount(),
-                'createdAt' => $order->getCreatedAt(),
-                'paidAt' => $order->getPaidAt(),
-                'usedAt' => $order->getUsedAt(),
-                'cancelledAt' => $order->getCancelledAt(),
-                'refundedAt' => $order->getRefundedAt(),
-                'status' => $order->getStatus(),
-                'node' => $this->data->formatNode($order->getNode()),
-            ]);
+            array_push($data, $this->data->formatOrder($order));
         }
 
         return $this->json($data);
