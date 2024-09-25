@@ -43,7 +43,7 @@ class OrderCrudController extends AbstractCrudController
     {
         return $actions
             ->add('index', 'detail')
-            ->disable('delete')
+            ->disable('delete', 'new', 'edit')
         ;
     }
 
@@ -79,6 +79,7 @@ class OrderCrudController extends AbstractCrudController
             ->add('createdAt')
             ->add('paidAt')
             ->add('usedAt')
+            ->add('deleted')
         ;
     }
 }
