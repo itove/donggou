@@ -345,6 +345,25 @@ class ApiController extends AbstractController
         return $this->json($data);
     }
 
+    #[Route('/orders/count', methods: ['GET'])]
+    public function countOrders(Request $request): Response
+    {
+        $uid = $request->query->get('uid');
+
+        $em = $this->data->getEntityManager();
+        $user = $em->getRepository(User::class)->find($uid);
+        $orders = $em->getRepository(Order::class)->findBy(['consumer' => $uid, 'deleted' => false], ['id' => 'DESC']);
+        
+        $data = [count($orders), 0, 0, 0, 0, 0, 0];
+        
+        foreach ($orders as $order) {
+            $status = $order->getStatus();
+            $data[$status]++;
+        }
+
+        return $this->json($data);
+    }
+
     #[Route('/orders', methods: ['POST'])]
     public function createOrder(Request $request): Response
     {
