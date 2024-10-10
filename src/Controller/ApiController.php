@@ -565,7 +565,6 @@ class ApiController extends AbstractController
         $user = $em->getRepository(User::class)->find($uid);
         $node = $this->data->getNode($nid);
         $amount = $node->getPrice() * $quantity;
-        $amount = 1;
 
         $order = new Order();
         $order->setNode($node);
