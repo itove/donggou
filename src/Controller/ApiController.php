@@ -579,7 +579,6 @@ class ApiController extends AbstractController
         $order->setWxPrepayId($resp['prepay_id']);
         $em->persist($order);
         $em->flush();
-        dump($order->getId());
 
         return $this->payWithWx($order->getId());
     }
